@@ -38,16 +38,6 @@ class PostsController extends Controller
     {
 
 
-        // Posts::create([
-        //     'title' => $request->input('title'),
-        //     'subtitle' => $request->input('subtitle'),
-        //     'body' => $request->input('body'),
-        //     'img' => $request->file('img')->store('images', 'public'),
-        // ]);
-
-        // ------------ Metodo per salvare un file jpg ---------- -
-
-
         
 
        $post = Posts::create([
@@ -55,13 +45,10 @@ class PostsController extends Controller
                  'subtitle' => $request->input('subtitle'),
                  'body' => $request->input('body'),
                  'user_id' => Auth::user()->id,
+                 'img' => $request->file('img')->store('images', 'public'),
              ]);
 
-             if ($request->file('img')) {
-
-                $post->img = $request->file('img')->store('images', 'public');
-    
-             }
+           
 
 
         // //Cosa fa dopo aver salvato sul database ?
@@ -92,20 +79,22 @@ class PostsController extends Controller
      */
     public function update(PostEditRequest $request, Posts $post)
     {
-        $post->update([
-            $post->title = $request->input('title'),
-            $post->subtitle = $request->input('subtitle'),
-            $post->body = $request->input('body'),
-            $post->user_id = Auth::user()->id,
-        ]);
-        if ($request->file('img')) { 
-            $post->update([
+        $data = [
+            'title' => $request->input('title'),
+            'subtitle' => $request->input('subtitle'),
+            'body' => $request->input('body'),
+            'user_id' => Auth::id(),
+        ];
 
-                $post->img = $request->file('img')->store('images', 'public'),
-            ]);
+        
+           // Se c'è un nuovo file, sovrascrive l'immagine
+        if ($request->hasFile('img')) {
+            $data['img'] = $request->file('img')->store('images', 'public');
         }
 
-        return redirect()->route('post.index')->with('message', 'Hai correttamente aggiornato il post');
+        $post->update($data);
+
+            return redirect()->route('post.index')->with('message', 'Hai correttamente aggiornato il post');
     }
 
     /**

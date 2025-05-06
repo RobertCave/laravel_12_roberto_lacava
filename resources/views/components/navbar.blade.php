@@ -28,8 +28,6 @@
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Gestione del Blog</a>
                     <div class="dropdown-menu">
                         <a href="{{ route('post.create') }}" class="dropdown-item">Scrivi Post</a>
-                        <a href="{{ route('post.index') }}" class="dropdown-item">Modifica Post</a>
-                        <a href="{{ route('post.index') }}" class="dropdown-item">Cancella Post</a>
                     </div>
                 </div>
                 @endauth
